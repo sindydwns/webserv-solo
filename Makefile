@@ -18,6 +18,9 @@ SERVERSRC = \
 	delegator/Delegator.cpp \
 	delegator/ServerDelegator.cpp \
 	delegator/ClientDelegator.cpp \
+	responer/Responer.cpp \
+	responer/StaticResponer.cpp \
+	responer/CgiResponer.cpp \
 	Config.cpp \
 	$(SERVER).cpp
 CLIENTSRC = \
