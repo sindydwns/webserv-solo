@@ -6,10 +6,11 @@
 class ServerDelegator : public Delegator
 {
 public:
-	ServerDelegator();
+	ServerDelegator(int kq);
 	~ServerDelegator();
-	ServerDelegator(const ServerDelegator &rhs);
-	ServerDelegator &operator=(const ServerDelegator &rhs);
+
+	virtual void run(struct kevent &event);
+
 private:
 };
 

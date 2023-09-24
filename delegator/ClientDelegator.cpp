@@ -1,6 +1,13 @@
 #include "ClientDelegator.hpp"
+#include "HttpRequestParser.hpp"
+#include "Singleton.hpp"
 
-ClientDelegator::ClientDelegator() { }
-ClientDelegator::ClientDelegator(const ClientDelegator &rhs) { (void)rhs; }
-ClientDelegator &ClientDelegator::operator=(const ClientDelegator &rhs) { (void)rhs; return *this; }
-ClientDelegator::~ClientDelegator() { }
+ClientDelegator::ClientDelegator(int kq): Delegator(kq)
+{
+	this->stream = Singleton<HttpRequestParser>::getInstance()->makeStream();
+}
+
+void ClientDelegator::run(struct kevent &event)
+{
+	(void)event;
+}
