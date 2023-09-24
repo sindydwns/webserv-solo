@@ -6,13 +6,21 @@
 class Delegator
 {
 public:
-	Delegator(int kq);
+	Delegator(int kq, int fd);
 	virtual ~Delegator();
 
-	virtual void run(struct kevent &event) = 0;
+	enum RunResult
+	{
+		Continue = 0,
+		End = 1
+	};
+
+	virtual enum Delegator::RunResult run(struct kevent &event) = 0;
+
 
 protected:
 	int kq;
+	int fd;
 };
 
 #endif

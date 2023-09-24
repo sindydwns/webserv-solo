@@ -6,10 +6,10 @@
 class ServerDelegator : public Delegator
 {
 public:
-	ServerDelegator(int kq);
+	ServerDelegator(int kq, int fd);
 	~ServerDelegator();
 
-	virtual void run(struct kevent &event);
+	virtual enum Delegator::RunResult run(struct kevent &event);
 
 private:
 };

@@ -1,16 +1,16 @@
 #include "ServerDelegator.hpp"
 #include "ClientDelegator.hpp"
-#include "exception/AcceptClientException.hpp"
+#include "../exception/AcceptClientException.hpp"
 
 #include <netdb.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/event.h>
 
-ServerDelegator::ServerDelegator(int kq): Delegator(kq) { }
+ServerDelegator::ServerDelegator(int kq, int fd): Delegator(kq, fd) { }
 ServerDelegator::~ServerDelegator() { }
 
-void ServerDelegator::run(struct kevent &event)
+Delegator::RunResult ServerDelegator::run(struct kevent &event)
 {
     struct sockaddr_in address;
 	size_t addrlen = sizeof(address);
@@ -23,8 +23,10 @@ void ServerDelegator::run(struct kevent &event)
 
 	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 	
-	ClientDelegator *client = new ClientDelegator(this->kq);
+	ClientDelegator *client = new ClientDelegator(this->kq, clientSocket);
 	struct kevent clientEvent;
 	EV_SET(&clientEvent, clientSocket, EVFILT_READ, EV_ADD, 0, 0, client);
 	kevent(this->kq, &clientEvent, 1, NULL, 0, NULL);
+
+	return Continue;
 }
