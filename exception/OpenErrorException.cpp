@@ -1,11 +1,11 @@
 #include "OpenErrorException.hpp"
 
-OpenErrorException::OpenErrorException(char *message)
+OpenErrorException::OpenErrorException(const char *message)
 {
 	this->message = message;
 }
 
-const char *OpenErrorException::what() const
+const char *OpenErrorException::what() const _NOEXCEPT
 {
 	return this->message;
 }

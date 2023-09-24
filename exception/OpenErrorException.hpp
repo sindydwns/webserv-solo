@@ -5,10 +5,10 @@
 
 class OpenErrorException : public std::exception {
 public:
-	OpenErrorException(char *message);
+	OpenErrorException(const char *message);
 	virtual const char* what() const _NOEXCEPT;
 private:
-	char *message;
+	const char *message;
 };
 
 #endif

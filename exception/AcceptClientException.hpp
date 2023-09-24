@@ -5,10 +5,10 @@
 
 class AcceptClientException : public std::exception {
 public:
-	AcceptClientException(char *message);
+	AcceptClientException(const char *message);
 	virtual const char* what() const _NOEXCEPT;
 private:
-	char *message;
+	const char *message;
 };
 
 #endif
