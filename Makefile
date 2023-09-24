@@ -23,6 +23,7 @@ SERVERSRC = \
 	responer/Responer.cpp \
 	responer/StaticResponer.cpp \
 	responer/CgiResponer.cpp \
+	HttpRequestParser.cpp \
 	Config.cpp \
 	Webserv.cpp \
 	$(SERVER).cpp

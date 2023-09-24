@@ -22,7 +22,7 @@ ParseStream HttpRequestParser::makeStream()
     return this->parser->makeStream();
 }
 
-Parser *createParser()
+Parser *HttpRequestParser::createParser()
 {
 	PatternSequenceGroup *startline = new PatternSequenceGroup("startline");
     startline->addPattern(new PatternWord("method"));
