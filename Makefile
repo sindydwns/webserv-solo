@@ -22,6 +22,7 @@ SERVERSRC = \
 	responer/StaticResponer.cpp \
 	responer/CgiResponer.cpp \
 	Config.cpp \
+	Webserv.cpp \
 	$(SERVER).cpp
 CLIENTSRC = \
 	$(CLIENT).cpp
