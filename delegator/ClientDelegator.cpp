@@ -7,6 +7,11 @@ ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq, fd)
 	this->stream = Singleton<HttpRequestParser>::getInstance()->makeStream();
 }
 
+ClientDelegator::~ClientDelegator()
+{
+	close(this->fd);
+}
+
 Delegator::RunResult ClientDelegator::run(struct kevent &event)
 {
 	if (event.filter == EVFILT_READ) {
@@ -46,7 +51,6 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 		std::cout << fd << ": " << buffer << "[" << valread << "]" << std::endl;
 		if (valread == 0) {
 			std::cout << fd << " closed" << std::endl;
-			close(fd);
 			return End;
 		}
 	}
@@ -68,7 +72,6 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 
 	if (event.filter == EVFILT_TIMER) {
 		std::cout << fd << " timeover" << std::endl;
-		close(fd);
 		return End;
 	}
 	return Continue;

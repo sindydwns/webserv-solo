@@ -11,6 +11,7 @@ class ClientDelegator : public Delegator
 {
 public:
 	ClientDelegator(int kq, int fd);
+	~ClientDelegator();
 
 	virtual enum Delegator::RunResult run(struct kevent &event);
 
