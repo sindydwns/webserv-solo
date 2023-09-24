@@ -15,6 +15,8 @@ SERVERSRC = \
 	parser/PatternReadAll.cpp \
 	parser/PatternSkipWs.cpp \
 	parser/ParseStream.cpp \
+	exception/OpenErrorException.cpp \
+	exception/AcceptClientException.cpp \
 	delegator/Delegator.cpp \
 	delegator/ServerDelegator.cpp \
 	delegator/ClientDelegator.cpp \
