@@ -32,16 +32,20 @@ void Webserv::open()
 		throw OpenErrorException("server open fail: undefined port");
 	}
 
+	this->kq = kqueue();
+	std::vector<ServerDelegator*> servers;
 	for (size_t i = 0; i < ports.size(); i++) {
 		try {
-			openSocket(ports[i]);
+			ServerDelegator *server = new ServerDelegator(kq, ports[i]);
+			servers.push_back(server);
 		} catch (std::exception &e) {
-			closeAllSocket();
+			for (size_t k = 0; k < i; k++) {
+				delete servers[k];
+			}
 			throw e;
 		}
 	}
 
-	this->kq = kqueue();
 	struct kevent serverEvent[serverSockets.size()];
 	for (size_t i = 0; i < serverSockets.size(); i++) {
 		Delegator *server = new ServerDelegator(this->kq, serverSockets[i]);
@@ -62,38 +66,5 @@ void Webserv::loop()
 				delete delegator;
 			}
 		}
-	}
-}
-
-void Webserv::openSocket(int port)
-{
-	int serverSocket;
-    struct sockaddr_in address;
-
-    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (serverSocket == -1) throw OpenErrorException("server open fail: socket");
-
-	int opt = 1;
-	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int))) {
-		throw OpenErrorException("server open fail: setsockopt");
-	}
-
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
-
-    if (bind(serverSocket, (struct sockaddr *)&address, sizeof(address))) {
-		throw OpenErrorException("server open fail: bind");
-	}
-    if (listen(serverSocket, 3)) {
-		throw OpenErrorException("server open fail: listen");
-	}
-	serverSockets.push_back(serverSocket);
-}
-
-void Webserv::closeAllSocket()
-{
-	for (size_t i = 0; i < serverSockets.size(); i++) {
-		close(serverSockets[i]);
 	}
 }

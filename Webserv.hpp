@@ -18,8 +18,6 @@ public:
 
 private:
 	Config config;
-	void openSocket(int port);
-	void closeAllSocket();
 
 	std::vector<int> serverSockets;
 	int kq;

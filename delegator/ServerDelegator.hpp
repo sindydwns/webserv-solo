@@ -6,7 +6,7 @@
 class ServerDelegator : public Delegator
 {
 public:
-	ServerDelegator(int kq, int fd);
+	ServerDelegator(int kq, int port);
 	~ServerDelegator();
 
 	virtual enum Delegator::RunResult run(struct kevent &event);

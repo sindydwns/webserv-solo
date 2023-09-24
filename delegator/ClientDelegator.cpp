@@ -2,7 +2,7 @@
 #include "../HttpRequestParser.hpp"
 #include "../Singleton.hpp"
 
-ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq, fd)
+ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq), fd(fd)
 {
 	this->stream = Singleton<HttpRequestParser>::getInstance()->makeStream();
 }
@@ -26,12 +26,11 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 					std::stringstream ss;
 					std::string str = this->stream.getResult().toString();
 					ss << "Content-Type: text/html\n";
-					ss << "Content-Length: " << str.size() * 50000 << "\n";
+					ss << "Content-Length: " << str.size() << "\n";
 					ss << "Connection: keep-alive\n";
 					this->res += ss.str();
 					this->res += "\r\n";
-					for (int i = 0; i < 50000; i++)
-						this->res += str;
+					this->res += str;
 				}
 				if (this->stream.isState(INVALID)) {
 					std::stringstream ss;

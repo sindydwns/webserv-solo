@@ -6,7 +6,7 @@
 class Delegator
 {
 public:
-	Delegator(int kq, int fd);
+	Delegator(int kq);
 	virtual ~Delegator();
 
 	enum RunResult

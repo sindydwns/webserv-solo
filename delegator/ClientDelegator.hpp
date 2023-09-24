@@ -16,6 +16,7 @@ public:
 	virtual enum Delegator::RunResult run(struct kevent &event);
 
 private:
+	int fd;
 	ParseStream stream;
 	std::string res;
 	size_t resIdx;
