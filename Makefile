@@ -15,6 +15,10 @@ SERVERSRC = \
 	parser/PatternReadAll.cpp \
 	parser/PatternSkipWs.cpp \
 	parser/ParseStream.cpp \
+	delegator/Delegator.cpp \
+	delegator/ServerDelegator.cpp \
+	delegator/ClientDelegator.cpp \
+	Config.cpp \
 	$(SERVER).cpp
 CLIENTSRC = \
 	$(CLIENT).cpp
@@ -34,8 +38,7 @@ $(CLIENT): $(CLIENTSRC:.cpp=.o)
 $(CLASS:.cpp=.o): %.o: %.cpp %.hpp
 
 clean:
-	rm -rf */**/*.o *.o
-	rm -rf */**/*.d *.d
+	find . -type f \( -name '*.o' -or -name '*.d' \) -print -delete
 
 fclean: clean
 	rm -f $(SERVER) $(CLIENT)
