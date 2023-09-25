@@ -59,12 +59,16 @@ void Webserv::loop()
 	while (1) {
 		struct kevent eventList[1024];
 		int nev = kevent(kq, NULL, 0, eventList, 1024, NULL);
+		std::vector<Delegator*> deleteList;
 		for (int i = 0; i < nev; i++) {
 			Delegator *delegator = reinterpret_cast<Delegator*>(eventList[i].udata);
 			Delegator::RunResult res = delegator->run(eventList[i]);
-			if (res == Delegator::End) {
-				delete delegator;
+			if (res == Delegator::End || res == Delegator::RecvEOF || res == Delegator::TimeOver) {
+				deleteList.push_back(delegator);;
 			}
+		}
+		for (size_t i = 0; i < deleteList.size(); i++) {
+			delete deleteList[i];
 		}
 	}
 }

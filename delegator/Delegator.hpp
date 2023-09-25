@@ -12,7 +12,9 @@ public:
 	enum RunResult
 	{
 		Continue = 0,
-		End = 1
+		End = 1,
+		RecvEOF = 2,
+		TimeOver = 3
 	};
 
 	virtual enum Delegator::RunResult run(struct kevent &event) = 0;

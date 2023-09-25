@@ -9,6 +9,7 @@ ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq), fd(fd)
 
 ClientDelegator::~ClientDelegator()
 {
+	std::cout << fd << " closed" << std::endl;
 	close(this->fd);
 }
 
@@ -48,9 +49,8 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 			}
 		}
 		std::cout << fd << ": " << buffer << "[" << valread << "]" << std::endl;
-		if (valread == 0) {
-			std::cout << fd << " closed" << std::endl;
-			return End;
+		if (valread == 0) {			
+			return RecvEOF;
 		}
 	}
 	if (event.filter == EVFILT_WRITE) {
@@ -70,8 +70,7 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 	}
 
 	if (event.filter == EVFILT_TIMER) {
-		std::cout << fd << " timeover" << std::endl;
-		return End;
+		return TimeOver;
 	}
 	return Continue;
 }
