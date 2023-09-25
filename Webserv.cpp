@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Webserv.hpp"
 
 // socket
@@ -10,11 +11,16 @@
 #include <sys/event.h>
 #include <sys/time.h>
 
-Webserv::Webserv() {}
-Webserv::Webserv(const Webserv &rhs) { (void)rhs; }
-Webserv &Webserv::operator=(const Webserv &rhs) { (void)rhs; return *this; }
+static void sigpipe(int sig)
+{
+	std::cout << "test: " << sig << std::endl;
+}
+
 Webserv::~Webserv() {}
-Webserv::Webserv(const Config &config): config(config) {}
+Webserv::Webserv(const Config &config): config(config)
+{
+	signal(SIGPIPE, sigpipe);
+}
 
 // for delegator
 #include "delegator/Delegator.hpp"
@@ -61,10 +67,14 @@ void Webserv::loop()
 		int nev = kevent(kq, NULL, 0, eventList, 1024, NULL);
 		std::vector<Delegator*> deleteList;
 		for (int i = 0; i < nev; i++) {
-			Delegator *delegator = reinterpret_cast<Delegator*>(eventList[i].udata);
-			Delegator::RunResult res = delegator->run(eventList[i]);
-			if (res == Delegator::End || res == Delegator::RecvEOF || res == Delegator::TimeOver) {
-				deleteList.push_back(delegator);;
+			try {
+				Delegator *delegator = reinterpret_cast<Delegator*>(eventList[i].udata);
+				Delegator::RunResult res = delegator->run(eventList[i]);
+				if (res == Delegator::End || res == Delegator::RecvEOF || res == Delegator::TimeOver) {
+					deleteList.push_back(delegator);;
+				}
+			} catch(std::exception &e) {
+				std::cout << e.what() << std::endl;
 			}
 		}
 		for (size_t i = 0; i < deleteList.size(); i++) {

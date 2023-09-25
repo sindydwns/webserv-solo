@@ -1,3 +1,4 @@
+#include <sys/socket.h>
 #include "ClientDelegator.hpp"
 #include "../HttpRequestParser.hpp"
 #include "../Singleton.hpp"
@@ -57,9 +58,7 @@ Delegator::RunResult ClientDelegator::run(struct kevent &event)
 		std::string &res = this->res;
 		if (res.size() - this->resIdx > 0) {
 			size_t i = this->resIdx;
-			// 클라이언트가 먼저 통신을 끊으면 프로그램이 그냥 종료 됨.
-			// 한 번에 처리할 수 있는 write 양은 얼마나 될까?
-			ssize_t written = write(fd, &(res.at(i)), res.size() - i);
+			ssize_t written = send(fd, &(res.at(i)), res.size() - i, 0);
 			if (written > 0) this->resIdx += written;
 		}
 		if (res.size() == this->resIdx) {

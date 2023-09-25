@@ -7,10 +7,7 @@
 class Webserv
 {
 public:
-	Webserv();
 	~Webserv();
-	Webserv(const Webserv &rhs);
-	Webserv &operator=(const Webserv &rhs);
 	Webserv(const Config &config);
 
 	void open();
