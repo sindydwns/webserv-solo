@@ -9,6 +9,6 @@ int main() {
 		server.open();
 		server.loop();
 	} catch(std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "error: " << e.what() << std::endl;
 	}
 }

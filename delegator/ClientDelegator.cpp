@@ -2,7 +2,7 @@
 #include "../HttpRequestParser.hpp"
 #include "../Singleton.hpp"
 
-ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq), fd(fd)
+ClientDelegator::ClientDelegator(int kq, int fd): Delegator(kq), fd(fd), resIdx(0)
 {
 	this->stream = Singleton<HttpRequestParser>::getInstance()->makeStream();
 }
